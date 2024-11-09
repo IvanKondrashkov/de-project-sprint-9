@@ -1,0 +1,102 @@
+version: "3.9"
+
+services:
+  stg_service:
+    build:
+      context: ./service_stg
+      network: host
+    image: stg_service:local
+    container_name: stg_service_container
+    environment:
+      FLASK_APP: ${STG_SERVICE_APP_NAME:-stg_service}
+      DEBUG: ${STG_SERVICE_DEBUG:-True}
+
+      KAFKA_HOST: ${KAFKA_HOST:-rc1a-h6sike6vhfgi10tg.mdb.yandexcloud.net}
+      KAFKA_PORT: ${KAFKA_PORT:-9091}
+      KAFKA_CONSUMER_USERNAME: ${KAFKA_CONSUMER_USERNAME:-producer_consumer}
+      KAFKA_CONSUMER_PASSWORD: ${KAFKA_CONSUMER_PASSWORD:-86!L=c3YuZl.}
+      KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP:-stg-service}
+      KAFKA_STG_SERVICE_CONSUMER_TOPIC: ${KAFKA_STG_SERVICE_CONSUMER_TOPIC:-order-service-orders}
+      KAFKA_STG_SERVICE_PRODUCER_TOPIC: ${KAFKA_STG_SERVICE_PRODUCER_TOPIC:-stg-service-orders}
+
+      PG_WAREHOUSE_HOST: ${PG_WAREHOUSE_HOST:-rc1a-kdbp3o9rxjpy7ghc.mdb.yandexcloud.net}
+      PG_WAREHOUSE_PORT: ${PG_WAREHOUSE_PORT:-6432}
+      PG_WAREHOUSE_DBNAME: ${PG_WAREHOUSE_DBNAME:-sprint9dwh}
+      PG_WAREHOUSE_USER: ${PG_WAREHOUSE_USER:-db_user}
+      PG_WAREHOUSE_PASSWORD: ${PG_WAREHOUSE_PASSWORD:-86!L=c3YuZl.}
+
+      REDIS_HOST: ${REDIS_HOST:-c-c9qiot0ebsslrmnqmafb.rw.mdb.yandexcloud.net}
+      REDIS_PORT: ${REDIS_PORT:-6380}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-86!L=c3YuZl.}
+
+      BATCH_SIZE: ${BATCH_SIZE:-100}
+    network_mode: "bridge"
+    ports:
+      - "5011:5000"
+    restart: unless-stopped
+
+  dds_service:
+    build:
+      context: ./service_dds
+      network: host
+    image: dds_service:local
+    container_name: dds_service_container
+    environment:
+      FLASK_APP: ${DDS_APP:-dds_service}
+      DEBUG: ${DDS_DEBUG:-True}
+
+      KAFKA_HOST: ${KAFKA_HOST:-rc1a-h6sike6vhfgi10tg.mdb.yandexcloud.net}
+      KAFKA_PORT: ${KAFKA_PORT:-9091}
+      KAFKA_CONSUMER_USERNAME: ${KAFKA_CONSUMER_USERNAME:-producer_consumer}
+      KAFKA_CONSUMER_PASSWORD: ${KAFKA_CONSUMER_PASSWORD:-86!L=c3YuZl.}
+      KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP:-dds-service}
+      KAFKA_DDS_SERVICE_CONSUMER_TOPIC: ${KAFKA_DDS_SERVICE_CONSUMER_TOPIC:-stg-service-orders}
+      KAFKA_DDS_SERVICE_PRODUCER_TOPIC: ${KAFKA_DDS_SERVICE_PRODUCER_TOPIC:-dds-service-orders}
+
+      PG_WAREHOUSE_HOST: ${PG_WAREHOUSE_HOST:-rc1a-kdbp3o9rxjpy7ghc.mdb.yandexcloud.net}
+      PG_WAREHOUSE_PORT: ${PG_WAREHOUSE_PORT:-6432}
+      PG_WAREHOUSE_DBNAME: ${PG_WAREHOUSE_DBNAME:-sprint9dwh}
+      PG_WAREHOUSE_USER: ${PG_WAREHOUSE_USER:-db_user}
+      PG_WAREHOUSE_PASSWORD: ${PG_WAREHOUSE_PASSWORD:-86!L=c3YuZl.}
+
+      BATCH_SIZE: ${BATCH_SIZE:-100}
+
+    depends_on:
+      - stg_service
+    network_mode: "bridge"
+    ports:
+      - "5012:5000"
+    restart: unless-stopped
+
+  cdm_service:
+    build:
+      context: ./service_cdm
+      network: host
+    image: cdm_service:local
+    container_name: cdm_service_container
+    environment:
+      FLASK_APP: ${CDM_SERVICE_APP:-cdm_service}
+      DEBUG: ${CDM_SERVICE_DEBUG:-True}
+
+      KAFKA_HOST: ${KAFKA_HOST:-rc1a-h6sike6vhfgi10tg.mdb.yandexcloud.net}
+      KAFKA_PORT: ${KAFKA_PORT:-9091}
+      KAFKA_CONSUMER_USERNAME: ${KAFKA_CONSUMER_USERNAME:-producer_consumer}
+      KAFKA_CONSUMER_PASSWORD: ${KAFKA_CONSUMER_PASSWORD:-86!L=c3YuZl.}
+      KAFKA_CONSUMER_GROUP: ${KAFKA_CONSUMER_GROUP:-cdm-service}
+      KAFKA_CDM_SERVICE_CONSUMER_TOPIC: ${KAFKA_CDM_SERVICE_CONSUMER_TOPIC:-dds-service-orders}
+      KAFKA_CDM_SERVICE_PRODUCER_TOPIC: ${KAFKA_CDM_SERVICE_PRODUCER_TOPIC:-cdm-service-orders}
+
+      PG_WAREHOUSE_HOST: ${PG_WAREHOUSE_HOST:-rc1a-kdbp3o9rxjpy7ghc.mdb.yandexcloud.net}
+      PG_WAREHOUSE_PORT: ${PG_WAREHOUSE_PORT:-6432}
+      PG_WAREHOUSE_DBNAME: ${PG_WAREHOUSE_DBNAME:-sprint9dwh}
+      PG_WAREHOUSE_USER: ${PG_WAREHOUSE_USER:-db_user}
+      PG_WAREHOUSE_PASSWORD: ${PG_WAREHOUSE_PASSWORD:-86!L=c3YuZl.}
+
+      BATCH_SIZE: ${BATCH_SIZE:-100}
+
+    depends_on:
+      - dds_service
+    network_mode: "bridge"
+    ports:
+      - "5013:5000"
+    restart: unless-stopped    

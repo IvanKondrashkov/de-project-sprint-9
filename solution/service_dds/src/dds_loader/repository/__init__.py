@@ -1,1 +1,2 @@
-from .dds_repository import DdsRepository  # noqa
+from .models import *
+from .dds_repository import DdsRepository

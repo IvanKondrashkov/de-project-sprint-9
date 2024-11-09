@@ -1,13 +1,35 @@
 # Проект 9-го спринта
 
-### Как работать с репозиторием
-1. В вашем GitHub-аккаунте автоматически создастся репозиторий `de-project-sprint-9` после того, как вы привяжете свой GitHub-аккаунт на Платформе.
-2. Скопируйте репозиторий на свой компьютер. В качестве пароля укажите ваш `Access Token`, который нужно получить на странице [Personal Access Tokens](https://github.com/settings/tokens)):
-	* `git clone https://github.com/{{ username }}/de-project-sprint-9.git`
-3. Перейдите в директорию с проектом: 
-	* `cd de-project-sprint-9`
-4. Выполните проект и сохраните получившийся код в локальном репозитории:
-	* `git add .`
-	* `git commit -m 'my best commit'`
-5. Обновите репозиторий в вашем GitHub-аккаунте:
-	* `git push origin main`
+![Yandex Cloud](https://img.shields.io/badge/-Yandex_Cloud-white)
+![Kubernetes](https://img.shields.io/badge/-Kubernetes-blue)
+![Redis](https://img.shields.io/badge/-Redis-red)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-salad)
+![Docker](https://img.shields.io/badge/-Docker-blue)
+![Python](https://img.shields.io/badge/-Python-blue)
+![Kafka](https://img.shields.io/badge/-Kafka-orange)
+
+### Описание
+Репозиторий предназначен для сдачи проекта 9-го спринта
+
+### Структура репозитория
+- `/sql`
+- `/solution/service_cdm`
+- `/solution/service_dds`
+- `/solution/service_stg`
+
+### Реджистри
+- `cr.yandex/crpgdvingmkgn00fc06u/cdm_service:v2024-11-09-r1`
+- `cr.yandex/crpgdvingmkgn00fc06u/dds_service:v2024-11-09-r1`
+- `cr.yandex/crpgdvingmkgn00fc06u/stg_service:v2024-11-09-r1`
+
+### Архитектура взаимодействия микросервисов
+
+<p float="center">
+  <img src="image/de-project-sprint-9-schema.png" width="95%" />
+</p>
+
+### Дашборд
+
+<p float="center">
+  <img src="image/de-project-sprint-9-dashbord.png" width="95%" />
+</p>

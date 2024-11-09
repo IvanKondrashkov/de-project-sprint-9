@@ -1,11 +1,10 @@
 import os
-
 from lib.kafka_connect import KafkaConsumer, KafkaProducer
 from lib.pg import PgConnect
 
-
 class AppConfig:
     CERTIFICATE_PATH = '/crt/YandexInternalRootCA.crt'
+    DEFAULT_JOB_INTERVAL = 25
 
     def __init__(self) -> None:
 
@@ -14,16 +13,18 @@ class AppConfig:
         self.kafka_consumer_username = str(os.getenv('KAFKA_CONSUMER_USERNAME'))
         self.kafka_consumer_password = str(os.getenv('KAFKA_CONSUMER_PASSWORD'))
         self.kafka_consumer_group = str(os.getenv('KAFKA_CONSUMER_GROUP'))
-        self.kafka_consumer_topic = str(os.getenv('KAFKA_SOURCE_TOPIC'))
+        self.kafka_consumer_topic = str(os.getenv('KAFKA_CDM_SERVICE_CONSUMER_TOPIC'))
         self.kafka_producer_username = str(os.getenv('KAFKA_CONSUMER_USERNAME'))
         self.kafka_producer_password = str(os.getenv('KAFKA_CONSUMER_PASSWORD'))
-        self.kafka_producer_topic = str(os.getenv('KAFKA_DESTINATION_TOPIC'))
+        self.kafka_producer_topic = str(os.getenv('KAFKA_CDM_SERVICE_PRODUCER_TOPIC'))
 
         self.pg_warehouse_host = str(os.getenv('PG_WAREHOUSE_HOST'))
         self.pg_warehouse_port = int(str(os.getenv('PG_WAREHOUSE_PORT')))
         self.pg_warehouse_dbname = str(os.getenv('PG_WAREHOUSE_DBNAME'))
         self.pg_warehouse_user = str(os.getenv('PG_WAREHOUSE_USER'))
         self.pg_warehouse_password = str(os.getenv('PG_WAREHOUSE_PASSWORD'))
+
+        self.batch_size = int(str(os.getenv('BATCH_SIZE')))
 
     def kafka_producer(self):
         return KafkaProducer(

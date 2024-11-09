@@ -1,12 +1,9 @@
 import json
 from typing import Dict, Optional
-
 from confluent_kafka import Consumer, Producer
-
 
 def error_callback(err):
     print('Something went wrong: {}'.format(err))
-
 
 class KafkaProducer:
     def __init__(self, host: str, port: int, user: str, password: str, topic: str, cert_path: str) -> None:
